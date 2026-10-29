@@ -34,6 +34,7 @@ For the "why," see [README.md](README.md). This document only covers "how."
   - [objectUtils](#objectutils)
   - [jsonUtils](#jsonutils)
   - [csvUtils](#csvutils)
+  - [clipboardUtils](#clipboardutils)
   - [urlUtils](#urlutils)
 - [Salesforce utility modules](#salesforce-utility-modules)
   - [apexErrorUtils](#apexerrorutils)
@@ -684,6 +685,28 @@ exportRowsToCsv(selectedRows, this.columns, 'accounts-export.csv');
 Formula neutralization is on by default because exported Salesforce text is user-entered. The cost is that a text value such as a phone number `+1 (555) 123-4567` is exported as `'+1 (555) 123-4567`; pass `{ neutralizeFormulas: false }` if the file will not be opened in a spreadsheet.
 
 `c-enterprise-datatable-demo` uses this for its **Export CSV** bulk action.
+
+### clipboardUtils
+
+```js
+import { copyText, copyValue } from 'c/clipboardUtils';
+import { showSuccessToast, showErrorToast } from 'c/toastService';
+
+async handleCopyId() {
+    const ok = await copyValue(this.recordId);
+    if (ok) {
+        showSuccessToast(this, 'Id copied to clipboard');
+    } else {
+        showErrorToast(this, 'Could not copy to clipboard');
+    }
+}
+```
+
+| Function | Signature | Description |
+|---|---|---|
+| `copyTextFallback` | `(text) => Boolean` | Synchronous copy via a hidden textarea + `document.execCommand('copy')`. Returns `false` if the browser blocks the copy. |
+| `copyText` | `async (text) => Boolean` | Prefers `navigator.clipboard.writeText`; falls back to `copyTextFallback` when the Clipboard API is missing or rejects (common in some Lightning Desktop / Experience Cloud contexts). |
+| `copyValue` | `async (value, { trim = true }?) => Boolean` | Convenience for Copy Id / Case Number / Circuit Id: stringifies, optionally trims, returns `false` for blank values without touching the clipboard. |
 
 ### jsonUtils
 

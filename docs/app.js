@@ -308,6 +308,21 @@ const CATALOG = [
     ]
   },
   {
+    id: 'clipboard-utils',
+    name: 'clipboardUtils',
+    category: 'Data utilities',
+    kind: 'JS module',
+    path: 'lwc/clipboardUtils',
+    tagline: 'Copy text to the clipboard with a textarea fallback for Lightning / Experience Cloud.',
+    usage:
+      "import { copyValue } from 'c/clipboardUtils';\nimport { showSuccessToast, showErrorToast } from 'c/toastService';\n\nconst ok = await copyValue(this.recordId);\nif (ok) showSuccessToast(this, 'Id copied');",
+    functions: [
+      ['copyTextFallback(text)', 'Synchronous copy via a hidden textarea + document.execCommand(\'copy\').'],
+      ['copyText(text)', 'Async: navigator.clipboard.writeText first, then copyTextFallback.'],
+      ['copyValue(value, { trim = true }?)', 'Copy Id / Case Number helper; trims by default, returns false for blank values.']
+    ]
+  },
+  {
     id: 'json-utils',
     name: 'jsonUtils',
     category: 'Data utilities',
